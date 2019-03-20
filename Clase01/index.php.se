@@ -1,0 +1,10 @@
+<?php
+
+    //El archivo index.php es el que se abre por defecto.
+    //Le puse cualquier cosa al final de la extensión del archivo para que no lo reconozca al abrir localhost/Clase01
+
+    echo 'Hola "mundo"';
+    echo "<br>Hola 'mundo'";
+    echo "<br>Hola \"mundo\" <br>";    
+
+?> 
