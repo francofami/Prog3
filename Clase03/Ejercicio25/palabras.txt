@@ -1,0 +1,2 @@
+Este es un texto de prueba para ver cuantas letras tiene cada palabra
+No debo tener en cuenta espacios ni saltos de línea
