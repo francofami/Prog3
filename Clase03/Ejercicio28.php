@@ -1,19 +1,17 @@
-<?php
-
-    /*Crear una página web que permita encriptar mensajes y que se guarden en un archivo de texto
-    y que sólo si se lee el archivo desde la página se podrá acceder a su texto claro, es decir se
-    desencriptará.
-    Crear la clase Enigma, la cual tendrá la funcionalidad de encriptar/desencriptar los mensajes.
-    Su método estático Encriptar , recibirá un mensaje y a cada número del código ASCII de cada
-    carácter del string le sumará 200. Una vez que cambie todos los caracteres, lo guardará en un
-    archivo de texto (el path también se recibirá por parámetro). Retornará TRUE si pudo guardar
-    correctamente el archivo encriptado, FALSE, caso contrario.
-    El método estático Desencriptar , recibirá sólo el path de dónde se leerá el archivo. Realizar el
-    proceso inverso para restarle a cada número del código ASCII de cada carácter leído 200, para
-    poder retornar el mensaje y ser mostrado desesncriptado.*/
-
-    
-
-
-
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form id="frmEmpleado" action="Ejercicio28/index.php" method="post">
+    Ingrese mensaje:                  
+    <br><textarea class="input2" name="mensaje" id="mensaje"></textarea><br>
+    <input type="submit" id="btnEnviar" value="Enviar" />
+    <input type="reset" value="Limpiar" />
+    </form>
+</body>
+</html>
