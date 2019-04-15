@@ -86,13 +86,27 @@ require_once "baseDatos.php";
             $sql = BaseDatos::EstablecerConexion();
         
             $sql = "INSERT INTO usuario (correo, clave, nombre, apellido, perfil)
-                    VALUES($this->correo, $this->clave, $this->nombre, $this->apellido, $this->perfil)";
+                    VALUES($obj->correo, $obj->clave, $obj->nombre, $obj->apellido, $obj->perfil)";
 
             mysql_db_query(BaseDatos::$base, $sql);
 
             $retorno = true;
 
             return $retorno;        
+        }
+
+        public static function Modificar($obj)
+        {
+            $retorno = false;
+
+            $sql = BaseDatos::EstablecerConexion();
+        
+            $sql = "UPDATE usuario SET correo='$obj->correo', clave='$obj->clave', nombre='$obj->nombre', apellido = '$obj->apellido', perfil = '$obj->perfil'
+                WHERE id=$obj->id";
+
+            mysql_db_query(BaseDatos::$base, $sql);
+
+            return $retorno;
         }
     }
 
