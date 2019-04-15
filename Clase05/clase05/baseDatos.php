@@ -2,13 +2,9 @@
 
 class BaseDatos
 {
-    public static $base;
-    private static $user;
-    private static $clave;
-
-    $base = "localhost";
-    $user = "root";
-    $clave = "";
+        public static $base="localhost";
+        private static $user= "root";
+        private static $clave= "";
 
     public static function EstablecerConexion()
     {

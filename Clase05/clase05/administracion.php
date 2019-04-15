@@ -154,8 +154,8 @@ switch($queHago){
     case "traerUnUsuario":
 
         $usuario = new Usuario;
-        $usuario = Usuario::Traer();
-        
+        $usuario = Usuario::Traer(1);
+
         break;
         
 
