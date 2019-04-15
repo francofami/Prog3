@@ -63,6 +63,37 @@ require_once "baseDatos.php";
 
             return $retorno;
         }
+
+        public function Eliminar()
+        {
+            $retorno = false;
+
+            $sql = BaseDatos::EstablecerConexion();
+
+            $sql = "DELETE FROM usuario WHERE id=$this->id";
+
+            mysql_db_query(BaseDatos::$base, $sql);
+
+            $retorno = true; //Fijarme que puedo usar para checkear si salio bien o no
+
+            return $retorno;
+        }
+
+        public static function Agregar($obj)
+        {
+            $retorno = false;
+            
+            $sql = BaseDatos::EstablecerConexion();
+        
+            $sql = "INSERT INTO usuario (correo, clave, nombre, apellido, perfil)
+                    VALUES($this->correo, $this->clave, $this->nombre, $this->apellido, $this->perfil)";
+
+            mysql_db_query(BaseDatos::$base, $sql);
+
+            $retorno = true;
+
+            return $retorno;        
+        }
     }
 
     

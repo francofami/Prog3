@@ -135,7 +135,7 @@ switch($queHago){
     
         $con = @mysql_connect($host, $user, $pass);
         
-        $sql = "DELETE FROM producto WHERE id=2";
+        sql = "DELETE FROM producto WHERE id=2";$
 
         mysql_db_query($base, $sql);
 
@@ -154,7 +154,7 @@ switch($queHago){
     case "traerUnUsuario":
 
         $usuario = new Usuario;
-        $usuario = Usuario::Traer(1);
+        $usuario = Usuario::Traer(2);
 
         break;
         
