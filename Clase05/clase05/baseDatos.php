@@ -2,13 +2,15 @@
 
 class BaseDatos
 {
-        public static $base="localhost";
+        public static $base="usuarios";
+        private static $host = "localhost";
         private static $user= "root";
         private static $clave= "";
 
     public static function EstablecerConexion()
     {
-        return @mysql_connect($base, $user, $clave);          
+        $con = @mysql_connect($host, $user, $clave);         
+        return $con;
     }
 
     public static function CerrarConexion()

@@ -153,8 +153,9 @@ switch($queHago){
 
     case "traerUnUsuario":
 
-        $usuario = new Usuario;
-        $usuario = Usuario::Traer(0);
+        //$id = isset($_POST['id']) ? $_POST['id'] : NULL;
+        //$usuario = new Usuario;
+        $usuario = Usuario::TraerUno(0);
 
         break;
 

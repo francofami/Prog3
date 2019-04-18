@@ -21,11 +21,11 @@ require_once "baseDatos.php";
             $this->perfil = $perfil;
         }
 
-        public static function Traer($id)
+        public static function TraerUno($id)
         {
             $retorno = null;
 
-            $sql = BaseDatos::EstablecerConexion();
+            $con = BaseDatos::EstablecerConexion();
 
             $sql = "SELECT * FROM usuario WHERE id=$id";
         
@@ -46,7 +46,7 @@ require_once "baseDatos.php";
         {
             $retorno = null;
 
-            $sql = BaseDatos::EstablecerConexion();
+            $con = BaseDatos::EstablecerConexion();
 
             $sql = "SELECT * FROM usuario";
         
@@ -68,7 +68,7 @@ require_once "baseDatos.php";
         {
             $retorno = false;
 
-            $sql = BaseDatos::EstablecerConexion();
+            $con = BaseDatos::EstablecerConexion();
 
             $sql = "DELETE FROM usuario WHERE id=$this->id";
 
@@ -83,7 +83,7 @@ require_once "baseDatos.php";
         {
             $retorno = false;
             
-            $sql = BaseDatos::EstablecerConexion();
+            $con = BaseDatos::EstablecerConexion();
         
             $sql = "INSERT INTO usuario (correo, clave, nombre, apellido, perfil)
                     VALUES($obj->correo, $obj->clave, $obj->nombre, $obj->apellido, $obj->perfil)";
@@ -99,7 +99,7 @@ require_once "baseDatos.php";
         {
             $retorno = false;
 
-            $sql = BaseDatos::EstablecerConexion();
+            $con = BaseDatos::EstablecerConexion();
         
             $sql = "UPDATE usuario SET correo='$obj->correo', clave='$obj->clave', nombre='$obj->nombre', apellido = '$obj->apellido', perfil = '$obj->perfil'
                 WHERE id=$obj->id";
