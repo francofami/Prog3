@@ -9,7 +9,7 @@ class BaseDatos
 
     public static function EstablecerConexion()
     {
-        $con = @mysql_connect($host, $user, $clave);         
+        $con = @mysql_connect(BaseDatos::$host, BaseDatos::$user, BaseDatos::$clave);         
         return $con;
     }
 

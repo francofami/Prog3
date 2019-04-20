@@ -29,9 +29,10 @@ require_once "baseDatos.php";
 
             $sql = "SELECT * FROM usuario WHERE id=$id";
         
-            $rs = mysql_db_query(BaseDatos::$base, $sql);
+            $rs = mysql_db_query(BaseDatos::$base, $sql, $con);
 
             $row = mysql_fetch_array($rs);
+            //$row = mysql_fetch_object($rs);
             
             var_dump($row);
             
@@ -50,7 +51,7 @@ require_once "baseDatos.php";
 
             $sql = "SELECT * FROM usuario";
         
-            $rs = mysql_db_query(BaseDatos::$base, $sql);
+            $rs = mysql_db_query(BaseDatos::$base, $sql, $con);
 
             while($row = mysql_fetch_array($rs))
             {
@@ -72,7 +73,7 @@ require_once "baseDatos.php";
 
             $sql = "DELETE FROM usuario WHERE id=$this->id";
 
-            mysql_db_query(BaseDatos::$base, $sql);
+            mysql_db_query(BaseDatos::$base, $sql, $con);
 
             $retorno = true; //Fijarme que puedo usar para checkear si salio bien o no
 
@@ -86,11 +87,13 @@ require_once "baseDatos.php";
             $con = BaseDatos::EstablecerConexion();
         
             $sql = "INSERT INTO usuario (correo, clave, nombre, apellido, perfil)
-                    VALUES($obj->correo, $obj->clave, $obj->nombre, $obj->apellido, $obj->perfil)";
+                    VALUES('$obj->correo', '$obj->clave', '$obj->nombre', '$obj->apellido', '$obj->perfil')";
 
-            mysql_db_query(BaseDatos::$base, $sql);
+            mysql_db_query(BaseDatos::$base, $sql, $con);
 
             $retorno = true;
+
+            BaseDatos::CerrarConexion();
 
             return $retorno;        
         }
@@ -104,7 +107,7 @@ require_once "baseDatos.php";
             $sql = "UPDATE usuario SET correo='$obj->correo', clave='$obj->clave', nombre='$obj->nombre', apellido = '$obj->apellido', perfil = '$obj->perfil'
                 WHERE id=$obj->id";
 
-            mysql_db_query(BaseDatos::$base, $sql);
+            mysql_db_query(BaseDatos::$base, $sql, $con);
 
             return $retorno;
         }

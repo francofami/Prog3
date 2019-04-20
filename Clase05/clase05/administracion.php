@@ -155,12 +155,12 @@ switch($queHago){
 
         //$id = isset($_POST['id']) ? $_POST['id'] : NULL;
         //$usuario = new Usuario;
-        $usuario = Usuario::TraerUno(0);
+        $usuario = Usuario::TraerUno(1);
 
         break;
 
     case "crearUsuario":
-        $usuario = new Usuario("dfasd@dsfafda.com", "AA", "BB", "CC", "DD", "EE");
+        $usuario = new Usuario(-1, "dfasd@dsfafda.com", "AA", "BB", "CC", "DD");
         Usuario::Agregar($usuario);     
         break;
 
