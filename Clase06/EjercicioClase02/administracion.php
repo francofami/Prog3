@@ -7,163 +7,67 @@ $queHago = isset($_POST['queHago']) ? $_POST['queHago'] : NULL;
 $host = "localhost";
 $user = "root";
 $pass = "";
-$base = "productos";
+$base = "usuarios";
 
 switch($queHago){
-
-    case "establecerConexion":
-
-        $con = @mysql_connect($host, $user, $pass);
-
-        echo "<pre>con = mysql_connect(host, user, pass)</pre>";
-
-        if(!$con)
-        {
-            echo "<pre>Error: No se pudo conectar a MySQL." . PHP_EOL;
-            echo "errno de depuración: " . mysql_errno() . PHP_EOL;
-            echo "error: " . mysql_error() . PHP_EOL . "</pre>";
-            return;
-        }
-
-        echo "<pre>Éxito: Se realizó una conexión a MySQL!!!." . PHP_EOL;
-        echo "Información del host: " . mysql_get_host_info($con) . PHP_EOL . "</pre>";
-        
-        mysql_close($con);
-
-        echo "<pre>mysql_close(con);</pre>";
-
-    break;
-    
-    case "ejecutarConsulta":
-
-        $con = @mysql_connect($host, $user, $pass);
-        
-        $sql = "SELECT * FROM producto";
-
-        $rs = mysql_db_query($base, $sql);
-
-        echo "<pre>
-            con = mysql_connect(host, user, pass); 
-            sql = 'SELECT * FROM producto';
-            rs = mysql_db_query(base, sql);
-        </pre>";
-        
-        echo "<pre>";
-        var_dump($rs);
-        echo "</pre>";
-
-        mysql_close($con);
-        
-        echo "<pre>mysql_close(con);</pre>";
-        
-    break;
-   
-    case "mostrarConsulta":
-    
-        $con = @mysql_connect($host, $user, $pass);
-        
-        $sql = "SELECT * FROM producto";
-
-        $rs = mysql_db_query($base, $sql);
-
-        echo "<pre>
-            con = mysql_connect(host, user, pass); 
-            sql = 'SELECT * FROM producto';
-            rs = mysql_db_query(base, sql);
-        </pre>";
-        
-        echo "<pre>while(row = mysql_fetch_object(rs)){</pre>";
-
-        echo "<pre>";
-        while($row = mysql_fetch_object($rs)){
-            
-            var_dump($row);
-        }
-        echo "</pre>";
-
-        mysql_close($con);
-        
-        echo "<pre>mysql_close(con);</pre>";
-        
-    break;
-
-    case "ejecutarInsert":
-    
-        $con = @mysql_connect($host, $user, $pass);
-        
-        $sql = "INSERT INTO producto (codigo_barra, nombre, path_foto)
-                VALUES(1112, 'nombre_producto', 'fake.jpg')";
-
-        mysql_db_query($base, $sql);
-
-        echo "<pre>
-            con = mysql_connect(host, user, pass); 
-            sql = 'INSERT INTO producto (codigo_barra, nombre, path_foto)';
-            VALUES(1112, 'nombre_producto', 'fake.jpg')'
-            mysql_db_query(base, sql);
-        </pre>";
-        
-        mysql_close($con);
-        
-        echo "<pre>mysql_close(con);</pre>";
-        
-        break;
-
-    case "ejecutarUpdate":
-    
-        $con = @mysql_connect($host, $user, $pass);
-        
-        $sql = "UPDATE producto SET codigo_barra=555, nombre='otro_nombre', path_foto='otroFake.jpg'
-                WHERE id = 2";
-
-        mysql_db_query($base, $sql);
-
-        echo "<pre>
-            con = mysql_connect(host, user, pass); 
-            sql = 'UPDATE producto SET codigo_barra=555, nombre='otro_nombre', path_foto='otroFake.jpg'
-            WHERE id = 2';
-            mysql_db_query(base, sql);
-        </pre>";
-        
-        mysql_close($con);
-        
-        echo "<pre>mysql_close(con);</pre>";
-        
-    break;
-
-    case "ejecutarDelete":
-    
-        $con = @mysql_connect($host, $user, $pass);
-        
-        $sql = "DELETE FROM producto WHERE id=2";
-
-        mysql_db_query($base, $sql);
-
-        echo "<pre>
-            con = mysql_connect(host, user, pass); 
-            sql = 'DELETE FROM producto WHERE id=2';
-            mysql_db_query(base, sql);
-        </pre>";
-        
-        mysql_close($con);
-        
-        echo "<pre>mysql_close(con);</pre>";
-        
-    break;
-
     case "traerUnUsuario":
 
         //$id = isset($_POST['id']) ? $_POST['id'] : NULL;
         //$usuario = new Usuario;
-        $usuario = Usuario::TraerUno(1);
+        $usuario = Usuario::TraerUno();
 
         break;
+    
+    case "traerTodos":
+
+    $usuarios = Usuario::TraerTodos();
+        
+    foreach ($usuarios as $usuario) {
+        
+        print_r($usuario->MostrarDatos());
+        print("
+                ");
+    }
+
+        break;
+
+    break;
 
     case "crearUsuario":
-        $usuario = new Usuario(-1, "dfasd@dsfafda.com", "AA", "BB", "CC", "DD");
-        Usuario::Agregar($usuario);     
+        $usuario = new Usuario();
+        $usuario->id = 66;
+        $usuario->correo = "ccgvfgd@fgfgfdsg.com";
+        $usuario->clave = "2018";
+        $usuario->nombre = "AAA";
+        $usuario->apellido = "BBB";
+        $usuario->perfil = "CCC";
+    
+        $usuario->InsertarUsuario();
+
+        echo "ok";   
         break;
 
+    case "modificarUsuario":
+        $id = $_POST['id'];        
+        $correo = $_POST['correo'];
+        $clave = $_POST['clave'];
+        $nombre = $_POST['nombre'];
+        $apellido = $_POST['apellido'];
+        $perfil = $_POST['perfil'];
+    
+        echo Usuario::ModificarUsuario($id, $correo, $clave, $nombre, $apellido, $perfil);
+            
+        break;
+
+    case "eliminarUsuario":
+        $usuario = new Usuario();
+        $usuario->id = 1;
+    
+        $usuario->EliminarCD($usuario);
+
+        echo "ok";
+    
+        break;
         
 
     default:

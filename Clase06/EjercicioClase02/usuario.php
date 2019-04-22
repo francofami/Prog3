@@ -1,6 +1,6 @@
 <?php
 
-require_once "baseDatos.php";
+    require_once "AccesoDatos.php";
 
     class Usuario
     {
@@ -11,7 +11,12 @@ require_once "baseDatos.php";
         public $apellido;
         public $perfil;
 
-        public function __construct($id, $correo, $clave, $nombre, $apellido, $perfil)
+        public function MostrarDatos()
+        {
+            return "<br>ID: ".$this->id."<br>Correo: ".$this->correo."<br>Clave: ".$this->clave."<br>Nombre: ".$this->nombre."<br>Apellido: ".$this->apellido."<br>Perfil: ".$this->perfil;  
+        }
+
+        /*public function __construct($id, $correo, $clave, $nombre, $apellido, $perfil)
         {
             $this->id = $id;
             $this->correo = $correo;
@@ -19,100 +24,98 @@ require_once "baseDatos.php";
             $this->nombre = $nombre;
             $this->apellido = $apellido;
             $this->perfil = $perfil;
-        }
+        }*/
 
-        public static function TraerUno($id)
+        public static function TraerUno()
         {
-            $retorno = null;
+            $obj = new stdClass();
+            $obj->Exito = TRUE;
+            $obj->Mensaje = "";
+            $obj->Html = "";
 
-            $con = BaseDatos::EstablecerConexion();
+            require_once "/clases/usuario.php";
+      
+            try {
+                $usuario='root';
+                $clave='';
+                
+                $db = new PDO('mysql:host=localhost;dbname=usuarios;charset=utf8', $usuario, $clave);
+                $obj->Mensaje = "FETCHOBJECT";
 
-            $sql = "SELECT * FROM usuario WHERE id=$id";
+                $sql = $db->query('SELECT id AS id, correo AS correo, clave AS clave, nombre AS nombre, apellido AS apellido, perfil AS perfil FROM usuario');
+
+                $obj->Html = "";
+
+                while ($fila = $sql->fetchObject("Usuario")) {//FETCHOBJECT -> RETORNA UN OBJETO DE UNA CALSE DADA
+                    $obj->Html .= "**". $fila->MostrarDatos(). '**';
+                }
         
-            $rs = mysql_db_query(BaseDatos::$base, $sql, $con);
+            } catch (PDOException $e) {
 
-            $row = mysql_fetch_array($rs);
-            //$row = mysql_fetch_object($rs);
-            
-            var_dump($row);
-            
-            $retorno = new Usuario($row[0],$row[1],$row[2],$row[3],$row[4],$row[5]);
+                $obj->Exito = FALSE;
+                $obj->Mensaje = "Error!!!\n" . $e->getMessage();
+            }
         
-            BaseDatos::CerrarConexion();
+            echo json_encode($obj);
 
-            return $retorno;
+            return $obj;
         }
 
         public static function TraerTodos()
         {
-            $retorno = null;
-
-            $con = BaseDatos::EstablecerConexion();
-
-            $sql = "SELECT * FROM usuario";
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         
-            $rs = mysql_db_query(BaseDatos::$base, $sql, $con);
-
-            while($row = mysql_fetch_array($rs))
-            {
-                $uno = new Usuario($row[0],$row[1],$row[2],$row[3],$row[4],$row[5]);
-                array_push($retorno, $uno);
-                var_dump($row);
-            }     
-        
-            BaseDatos::CerrarConexion();
-
-            return $retorno;
-        }
-
-        public function Eliminar()
-        {
-            $retorno = false;
-
-            $con = BaseDatos::EstablecerConexion();
-
-            $sql = "DELETE FROM usuario WHERE id=$this->id";
-
-            mysql_db_query(BaseDatos::$base, $sql, $con);
-
-            $retorno = true; //Fijarme que puedo usar para checkear si salio bien o no
-
-            return $retorno;
-        }
-
-        public static function Agregar($obj)
-        {
-            $retorno = false;
+            $consulta = $objetoAccesoDato->RetornarConsulta("SELECT id AS id, correo AS correo, clave AS clave, nombre AS nombre, apellido AS apellido, perfil AS perfil FROM usuario");        
             
-            $con = BaseDatos::EstablecerConexion();
-        
-            $sql = "INSERT INTO usuario (correo, clave, nombre, apellido, perfil)
-                    VALUES('$obj->correo', '$obj->clave', '$obj->nombre', '$obj->apellido', '$obj->perfil')";
-
-            mysql_db_query(BaseDatos::$base, $sql, $con);
-
-            $retorno = true;
-
-            BaseDatos::CerrarConexion();
-
-            return $retorno;        
+            $consulta->execute();
+            
+            $consulta->setFetchMode(PDO::FETCH_INTO, new Usuario);                                                
+    
+            return $consulta;
         }
 
-        public static function Modificar($obj)
+        public static function InsertarUsuario()
         {
-            $retorno = false;
-
-            $con = BaseDatos::EstablecerConexion();
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         
-            $sql = "UPDATE usuario SET correo='$obj->correo', clave='$obj->clave', nombre='$obj->nombre', apellido = '$obj->apellido', perfil = '$obj->perfil'
-                WHERE id=$obj->id";
+            $consulta =$objetoAccesoDato->RetornarConsulta("INSERT INTO usuario (correo, clave, nombre, apellido, perfil)"
+                                                    . "VALUES(:correo, :clave, :nombre, :apellido, :perfil)");
+            $consulta->bindValue(':correo', $this->correo, PDO::PARAM_STR);
+            $consulta->bindValue(':clave', $this->clave, PDO::PARAM_STR);
+            $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
+            $consulta->bindValue(':apellido', $this->apellido, PDO::PARAM_STR);
+            $consulta->bindValue(':perfil', $this->perfil, PDO::PARAM_STR);
 
-            mysql_db_query(BaseDatos::$base, $sql, $con);
+            $consulta->execute();   
+        }
 
-            return $retorno;
+        public static function ModificarUsuario($id, $correo, $clave, $nombre, $apellido, $perfil)
+        {
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        
+            $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE usuario SET correo = :correo, clave = :clave, 
+                                                        nombre = :nombre, apellido = :apellido, perfil = :perfil WHERE id = :id");
+        
+            $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+            $consulta->bindValue(':correo', $correo, PDO::PARAM_STR);
+            $consulta->bindValue(':clave', $clave, PDO::PARAM_STR);
+            $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+            $consulta->bindValue(':apellido', $apellido, PDO::PARAM_STR);
+            $consulta->bindValue(':perfil', $perfil, PDO::PARAM_STR);
+
+            return $consulta->execute();
+        }
+
+        public function EliminarUsuario($usuario)
+        {
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        
+            $consulta =$objetoAccesoDato->RetornarConsulta("DELETE FROM usuario WHERE id = :id");
+        
+            $consulta->bindValue(':id', $usuario->id, PDO::PARAM_INT);
+
+            return $consulta->execute();
         }
     }
-
-    
 
 ?>
