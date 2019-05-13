@@ -62,6 +62,46 @@ $app->get('/mostrar/{nombre}', function (Request $request, Response $response, $
     return $response;
 });
 
+$app->post('/mostrar/{nombre}/{apellido}', function (Request $request, Response $response)
+{
+    $data = array();
+    $data['nombre'] = $args['nombre'];
+    $data['apellido'] = $args['apellido'];
+    $data['id'] = rand(0,99);
+    $response->withJson($data);
+    $response->withStatus(302);
+    //$response->getBody()->write("POST => Bienvenido!!! a SlimFramework");
+    return $response;
+});
+
+//Recibo un objeto Json en http://localhost:8080/Prog3/Clase07/mostrar/ por POST
+
+$app->post('/mostrar/', function (Request $request, Response $response) 
+{
+    $args = $request->getParsedBody();
+    $data = new stdClass();
+    $data->nombre = $args['nombre'];
+    $data->apellido = $args['apellido'];
+    $data->id = rand(0,99);
+    $objResp = $response->withJson($data, 302);
+
+    //$response->getBody()->write("POST => Bienvenido!!! a SlimFramework");
+    return $objResp;
+});
+
+$app->post('/json/', function (Request $request, Response $response) 
+{
+    $args = $request->getParsedBody();
+    $data = new stdClass();
+    $data = $args['json'];
+
+    $obj = json_decode($data);
+    //$objResp = $response->getParsedBody($data, 302);
+
+    //$response->getBody()->write("POST => Bienvenido!!! a SlimFramework");
+    return $obj->nombre;
+});
+
 $app->run();
 
 ?>
