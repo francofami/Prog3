@@ -9,15 +9,12 @@
 
     foreach($juguetes as $juguete)
     {
-        $juguete->ToString();
-        //$precio = $juguetes[$i]->Precio();
-        //$tipo = Juguete::Tipo($juguetes[$i]);
-        //$precio = $juguete->Precio();
-        //$paisOrigen = $juguete->PaisOrigen();
-        //$pathImagen = $juguete->PathImagen();
-
-        //$tabla .= "<tr><td>$tipo</td><td>$precio</td><td>$paisOrigen</td><td><img src='localhost:8080/parcial/$pathImagen'/></td></tr>";
+        //$juguete->ToString();
+        $tabla .= "<tr><td>$juguete->tipo</td><td>$juguete->precio</td><td>$juguete->paisOrigen</td><td><img src='./$juguete->foto' height=100 weight=100/></td></tr>";
+        
     }
 
-    //echo $tabla .= "</table>";
+    echo $tabla .= "</table>";
+
+    
 ?>

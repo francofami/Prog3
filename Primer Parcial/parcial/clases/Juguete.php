@@ -2,6 +2,7 @@
 
     require_once "IParte1.php";
     require_once "AccesoDatos.php";
+    require_once "IParte2.php";
 
     class Juguete implements IParte1
     {
@@ -9,26 +10,6 @@
         private $precio;
         private $paisOrigen;
         private $pathImagen;
-
-        public static function Tipo($juguete)
-        {
-            return $juguete->tipo;
-        }
-
-        public function Precio()
-        {
-            return $this->precio;
-        }
-
-        public function PaisOrigen()
-        {
-            return $this->paisOrigen;
-        }
-
-        public function PathImagen()
-        {
-            return $this->pathImagen;
-        }
 
         public function __construct($tipo, $precio, $paisOrigen, $pathImagen)
         {
@@ -60,13 +41,13 @@
         {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         
-            $consulta = $objetoAccesoDato->RetornarConsulta("SELECT tipo AS tipo, precio AS precio, pais AS pais, foto AS foto FROM juguetes");
+            $consulta = $objetoAccesoDato->RetornarConsulta("SELECT tipo AS tipo, precio AS precio, pais AS paisOrigen, foto AS foto FROM juguetes");
             
             $consulta->execute();
             
-            $consulta->setFetchMode(PDO::FETCH_INTO, new Juguete('tipo','precio','pais','foto')); 
+            //$consulta->setFetchMode(PDO::FETCH_INTO, new Juguete('tipo','precio','pais','foto')); 
             
-            
+            $consulta->setFetchMode(PDO::FETCH_INTO, new stdClass(array ('tipo' => 'tipo', 'precio' => 'precio', 'paisOrigen' => 'paisOrigen', 'foto' => 'foto')));             
     
             return $consulta;
         }
@@ -98,10 +79,61 @@
 
             while(!feof($file))
             {
-                echo fgets($file);
+                echo fgets($file)."<br>";
             }
 
             fclose($file);
+        }
+
+        public function Modificar()
+        {
+            $retorno = false; 
+
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        
+            $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE juguetes SET tipo = :tipo, precio=:precio, pais=:pais, foto=:foto WHERE tipo = :tipoAct AND pais = :paisAct");
+            
+            $consulta->bindValue(':tipo', $this->tipo, PDO::PARAM_STR);
+            $consulta->bindValue(':precio', $this->CalcularIVA(), PDO::PARAM_STR);
+            $consulta->bindValue(':pais', $this->paisOrigen, PDO::PARAM_STR);
+            $consulta->bindValue(':foto', $this->pathImagen, PDO::PARAM_STR);
+
+            $consulta->bindValue(':tipoAct', $this->tipo, PDO::PARAM_STR);
+            //$consulta->bindValue(':precioAct', $this->precio, PDO::PARAM_STR);
+            $consulta->bindValue(':paisAct', $this->paisOrigen, PDO::PARAM_STR);
+            //$consulta->bindValue(':fotoAct', $this->pathImagen, PDO::PARAM_STR);
+
+            $consulta->execute();
+            
+            //$consulta->setFetchMode(PDO::FETCH_INTO, new Juguete('tipo','precio','pais','foto')); 
+            
+            $consulta->setFetchMode(PDO::FETCH_INTO, new stdClass(array ('tipo' => 'tipo', 'precio' => 'precio', 'pais' => 'pais', 'foto' => 'foto')));             
+    
+            if($consulta->rowCount() > 0) 
+            {
+                $retorno = true;
+            }
+
+            return $retorno;
+        }
+
+        public function Eliminar()
+        {
+            $retorno = false;
+
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+
+            $consulta =$objetoAccesoDato->RetornarConsulta("DELETE FROM juguetes WHERE tipo = :tipoAct AND pais = :paisAct");
+
+            $consulta->bindValue(':tipoAct', $this->tipo, PDO::PARAM_STR);
+            $consulta->bindValue(':paisAct', $this->paisOrigen, PDO::PARAM_STR);     
+
+            if($consulta->rowCount() > 0) 
+            {
+                $retorno = true;
+            }
+
+            return $retorno;
         }
 
 
