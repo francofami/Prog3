@@ -4,14 +4,14 @@
     require_once "AccesoDatos.php";
     require_once "IParte2.php";
 
-    class Juguete implements IParte1
+    class Juguete implements IParte1, IParte2
     {
         private $tipo;
         private $precio;
         private $paisOrigen;
         private $pathImagen;
 
-        public function __construct($tipo, $precio, $paisOrigen, $pathImagen)
+        public function __construct($tipo, $precio, $paisOrigen, $pathImagen = "")
         {
             $this->tipo = $tipo;
             $this->paisOrigen = $paisOrigen;

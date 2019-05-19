@@ -8,7 +8,7 @@
     {
         $file = fopen("./archivos/juguetes_sin_foto.txt", "a");
 
-        fwrite($file, date("hi")." - ".$juguete->ToString());
+        fwrite($file, date("hi")." - ".$juguete->ToString()."\r\n");
 
         fclose($file);
 
