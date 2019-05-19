@@ -52,7 +52,7 @@
             return $consulta;
         }
 
-	public static function TraerTodos()
+	/*public static function TraerTodos()
     	{
         	$juguetes = array();
 
@@ -73,7 +73,7 @@
             	}	                                          
 
             return $juguetes;
-    	}
+    	}*/
 
         function CalcularIVA()
         {
