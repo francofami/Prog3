@@ -52,6 +52,29 @@
             return $consulta;
         }
 
+	public static function TraerTodos()
+    	{
+        	$juguetes = array();
+
+           	$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        
+            	$consulta = $objetoAccesoDato->RetornarConsulta("SELECT tipo, precio, pais, foto FROM juguetes");
+                  
+            	$consulta->execute();
+
+            	$consulta->setFetchMode(PDO::FETCH_ASSOC);  
+
+            	while ($juguete = $consulta->fetch())
+		{
+                	if($juguete["foto"] != "")
+                    	array_push($juguetes, new Juguete($juguete["tipo"],$juguete["precio"],$juguete["pais"],$juguete["foto"]));
+                	else
+                    	array_push($juguetes, new Juguete($juguete["tipo"],$juguete["precio"],$juguete["pais"]));
+            	}	                                          
+
+            return $juguetes;
+    	}
+
         function CalcularIVA()
         {
             return $this->precio + ($this->precio * 0.21);
